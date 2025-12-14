@@ -14,14 +14,15 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </div>
     <div class="flex justify-around">
     <div class="flex justify-between items-start">
-      <textarea class="h-100 border border-gray-300 rounded px-4 py-2 mr-4" placeholder="Enter your text"></textarea>
+      <textarea class="h-100 w-md border border-gray-300 rounded px-4 py-2 mr-4" placeholder="Enter your text"></textarea>
       <button class="bg-primary hover:bg-primary-foreground text-white font-bold py-2 px-4 rounded">Convert</button>
     </div>
-    <div class="w-full max-w-md">
-      <audio controls class="w-full">
+    <div class="w-full max-w-md" flex flex-row h-20>
+      <audio controls>
         <source src="audio-file.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
-      </audio>  
+      </audio> 
+      <button class="mt-4 bg-secondary hover:bg-secondary-foreground text-white font-bold py-2 px-4 rounded"><img src="./src/asset/images/download.png" /></button>
     </div>
   <footer class="fixed bottom-0 w-full flex justify-center items-center p-4 bg-gray-800 text-white">
     <p class="text-lg">Copyright © 2025 Text to Audio</p>
