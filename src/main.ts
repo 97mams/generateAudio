@@ -1,5 +1,3 @@
-import { setupCounter } from "./counter.ts";
-import { formDataToObject } from "./form-convert";
 import "./style.css";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
@@ -24,19 +22,10 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
         <button class="bg-primary hover:bg-primary-foreground text-white font-bold py-2 px-4 rounded" id="convert-btn">Convert</button>
       </div>
     </div>
-    <div class="w-full max-w-md flex flex-row h-20 items-center gap-2">
-      <audio controls>
-        <source src="audio-file.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio> 
-      <button class=" bg-secondary hover:bg-secondary-foreground text-white font-bold h-10 w-10 flex items-center justify-center rounded"><img src="./src/asset/images/download.png" class="covertt" /></button>
-    </div>
+    <div id="audio-container" class="w-md border border-gray-300 rounded px-4 py-2"></div>
   <footer class="fixed bottom-0 w-full flex justify-center items-center p-4 bg-gray-800 text-white">
     <p class="text-lg">Copyright © 2025 Text to Audio</p>
   </footer>
 `;
 
 const btn = document.querySelector<HTMLButtonElement>("#convert-btn");
-
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
-formDataToObject(btn!);
