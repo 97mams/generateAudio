@@ -1,4 +1,5 @@
 import { setupCounter } from "./counter.ts";
+import { formDataToObject } from "./form-convert";
 import "./style.css";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
@@ -14,11 +15,11 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </div>
     <div class="flex justify-around">
     <div class="flex justify-between items-start">
-      <textarea name="text" class="h-100 w-md border border-gray-300 rounded px-4 py-2 mr-4" placeholder="Enter your text"></textarea>
+      <textarea id="input-text" class="h-100 w-md border border-gray-300 rounded px-4 py-2 mr-4" placeholder="Enter your text"></textarea>
       <div class="flex flex-col justify-center">
       <select name="language" class="mb-4 border border-gray-300 rounded px-4 py-2">
-        <option>En</option>
-        <option>Fr</option>
+        <option value="en-US">En</option>
+        <option value="fr-FR">Fr</option>
       </select>
         <button class="bg-primary hover:bg-primary-foreground text-white font-bold py-2 px-4 rounded" id="convert-btn">Convert</button>
       </div>
@@ -35,4 +36,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   </footer>
 `;
 
+const btn = document.querySelector<HTMLButtonElement>("#convert-btn");
+
 setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+formDataToObject(btn!);
