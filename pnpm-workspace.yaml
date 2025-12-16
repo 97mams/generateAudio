@@ -1,8 +1,3 @@
-<<<<<<< HEAD
 packages:
- - 'frontend/**'
- - 'backend/**'
-=======
-ignoredBuiltDependencies:
-  - esbuild
->>>>>>> 266d73ec9cee223941da2c2757d2d897dbfd1efa
+  - "frontend/**"
+  - "backend/**"
