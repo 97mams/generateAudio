@@ -46,3 +46,8 @@ dist-ssr
 *.sln
 *.sw?
 >>>>>>> 266d73ec9cee223941da2c2757d2d897dbfd1efa
+
+node_modules
+dist
+dist-ssr
+*.local
