@@ -1,36 +1,42 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { Audio } from '#models/audio'
 
 export default class AudioController {
-  async index(ctx: HttpContext) {
-    const audios = await Audio.all()
-    return audios
+  /**
+   * Display a list of resource
+   */
+  async index({}: HttpContext) {
+    return {
+      message: 'List of audio records',
+    }
   }
 
-  async show(ctx: HttpContext) {
-    const audio = await Audio.findOrFail(ctx.params.id)
-    return audio
-  }
+  /**
+   * Display form to create a new record
+   */
+  async create({}: HttpContext) {}
 
-  async store(ctx: HttpContext) {
-    const audio = await Audio.create(ctx.request.body())
-    return audio
-  }
+  /**
+   * Handle form submission for the create action
+   */
+  async store({ request }: HttpContext) {}
 
-  async update(ctx: HttpContext) {
-    const audio = await Audio.findOrFail(ctx.params.id)
-    await audio.merge(ctx.request.body()).save()
-    return audio
-  }
+  /**
+   * Show individual record
+   */
+  async show({ params }: HttpContext) {}
 
-  async destroy(ctx: HttpContext) {
-    const audio = await Audio.findOrFail(ctx.params.id)
-    await audio.delete()
-    return audio
-  }
+  /**
+   * Edit individual record
+   */
+  async edit({ params }: HttpContext) {}
 
-  async restore(ctx: HttpContext) {
-    const audio = await Audio.restore(ctx.params.id)
-    return audio
-  }
+  /**
+   * Handle form submission for the edit action
+   */
+  async update({ params, request }: HttpContext) {}
+
+  /**
+   * Delete record
+   */
+  async destroy({ params }: HttpContext) {}
 }
