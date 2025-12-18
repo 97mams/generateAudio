@@ -1,3 +1,4 @@
+import Audio from '#models/audio'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AudioController {
@@ -5,9 +6,8 @@ export default class AudioController {
    * Display a list of resource
    */
   async index({}: HttpContext) {
-    return {
-      message: 'List of audio records',
-    }
+    const audios = await Audio.all()
+    return audios
   }
 
   /**
@@ -23,20 +23,36 @@ export default class AudioController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  async show({ params }: HttpContext) {
+    const audio = await Audio.findOrFail(params.id)
+    return audio
+  }
 
   /**
    * Edit individual record
    */
-  async edit({ params }: HttpContext) {}
+  async edit({ params }: HttpContext) {
+    const audio = await Audio.findOrFail(params.id)
+    return audio
+  }
 
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request }: HttpContext) {}
+  async update({ params, request }: HttpContext) {
+    const audio = await Audio.findOrFail(params.id)
+    const data: { title: string; path: string } = request.only(['title', 'path'])
+    audio.merge(data)
+    await audio.save()
+    return audio
+  }
 
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params }: HttpContext) {
+    const audio = await Audio.findOrFail(params.id)
+    await audio.delete()
+    return { message: 'Audio deleted successfully' }
+  }
 }
