@@ -5,5 +5,6 @@ router
   .group(() => {
     router.get('audio', [AudioController, 'index'])
     router.get('audio/:id', [AudioController, 'show'])
+    router.post('audio', [AudioController, 'store'])
   })
   .prefix('/api')
