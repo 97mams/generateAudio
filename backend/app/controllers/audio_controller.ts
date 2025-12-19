@@ -1,4 +1,5 @@
 import Audio from '#models/audio'
+import { createAudioValidator } from '#validators/audio_validate'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AudioController {
@@ -10,40 +11,19 @@ export default class AudioController {
     return audios
   }
 
-  /**
-   * Display form to create a new record
-   */
-  async create({}: HttpContext) {}
+  async store({ request }: HttpContext) {
+    const data = request.all()
+    const validatedData = await createAudioValidator.validate(data)
 
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {}
+    const audio = await Audio.create(validatedData)
+    return audio
+  }
 
   /**
    * Show individual record
    */
   async show({ params }: HttpContext) {
     const audio = await Audio.findOrFail(params.id)
-    return audio
-  }
-
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {
-    const audio = await Audio.findOrFail(params.id)
-    return audio
-  }
-
-  /**
-   * Handle form submission for the edit action
-   */
-  async update({ params, request }: HttpContext) {
-    const audio = await Audio.findOrFail(params.id)
-    const data: { title: string; path: string } = request.only(['title', 'path'])
-    audio.merge(data)
-    await audio.save()
     return audio
   }
 
