@@ -1,9 +1,15 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { DateTime } from 'luxon'
 
 export default class Audio extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
+
+  @column()
+  declare title: string
+
+  @column()
+  declare path: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
