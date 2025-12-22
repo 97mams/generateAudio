@@ -1,25 +1,26 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
-import type { Authenticators } from '@adonisjs/auth/types'
+import { createHash } from 'node:crypto'
 
-/**
- * Auth middleware is used authenticate HTTP requests and deny
- * access to unauthenticated users.
- */
-export default class AuthMiddleware {
-  /**
-   * The URL to redirect to, when authentication fails
-   */
-  redirectTo = '/login'
+export default class AudioMiddleware {
+  async handle(ctx: HttpContext, next: NextFn) {
+    const userAgent = ctx.request.header('user-agent') || 'unknown'
+    const fingerPrint = createHash('sha256').update(userAgent).digest('hex')
 
-  async handle(
-    ctx: HttpContext,
-    next: NextFn,
-    options: {
-      guards?: (keyof Authenticators)[]
-    } = {}
-  ) {
-    await ctx.auth.authenticateUsing(options.guards, { loginRoute: this.redirectTo })
-    return next()
+    const stored = ctx.session.get('audio_finger_print', fingerPrint)
+    if (!stored) {
+      ctx.session.put('audio_finger_print', 'true')
+      return next()
+    }
+
+    if (stored !== fingerPrint) {
+      ctx.session.clear()
+      return ctx.response.unauthorized({
+        message: 'session expired',
+      })
+    }
+
+    const output = await next()
+    return output
   }
 }
