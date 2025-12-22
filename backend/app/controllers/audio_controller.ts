@@ -1,4 +1,5 @@
 import Audio from '#models/audio'
+import { AudioService } from '#services/audio_service'
 import { createAudioValidator } from '#validators/audio_validate'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -7,8 +8,8 @@ export default class AudioController {
    * Display a list of resource
    */
   async index({}: HttpContext) {
-    const audios = await Audio.all()
-    return audios
+    const service = new AudioService()
+    return service.allAudio()
   }
 
   async store({ request }: HttpContext) {
