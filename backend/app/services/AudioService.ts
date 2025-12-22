@@ -10,3 +10,8 @@ export function audio_service(filePath: string): Promise<string> {
     }, 1000)
   })
 }
+
+export expireRegisterAudioService = () => {
+  // Logic to expire or unregister the audio service
+  console.log('Audio service has been unregistered.')
+}
