@@ -1,8 +1,8 @@
-import Audio from '#models/audio'
+import db from '@adonisjs/lucid/services/db'
 
 export class AudioService {
   async allAudio() {
-    const audio = await Audio.all()
+    const audio = await db.from('audio').select('title', 'path')
     return audio
   }
 }
