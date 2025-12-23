@@ -1,4 +1,5 @@
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 const AudioController = () => import('#controllers/audio_controller')
 
 router
@@ -8,3 +9,4 @@ router
     router.post('audio', [AudioController, 'store'])
   })
   .prefix('/api')
+  .use(middleware.auth())

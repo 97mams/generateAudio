@@ -7,13 +7,15 @@ export default class AudioController {
   /**
    * Display a list of resource
    */
-  async index({}: HttpContext) {
+  async index() {
     const service = new AudioService()
     return service.allAudio()
   }
 
-  async store({ request }: HttpContext) {
-    const data = request.all()
+  async store(ctx: HttpContext) {
+    const data = ctx.request.all()
+    const usesession = ctx.session.get('audio_finger_print')
+    console.log(usesession)
     const validatedData = await createAudioValidator.validate(data)
 
     const audio = await Audio.create(validatedData)
