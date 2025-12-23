@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('title').notNullable()
       table.string('path').notNullable().unique()
+      table.string('ipUser').defaultTo('')
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })

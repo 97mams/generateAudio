@@ -11,6 +11,9 @@ export default class Audio extends BaseModel {
   @column()
   declare path: string
 
+  @column()
+  declare ipUser: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
