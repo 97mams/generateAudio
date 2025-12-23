@@ -9,9 +9,11 @@ export default class AudioMiddleware {
 
     const stored = ctx.session.get('audio_finger_print', fingerPrint)
     if (!stored) {
-      ctx.session.put('audio_finger_print', 'true')
+      ctx.session.put('audio_finger_print', fingerPrint)
       return next()
     }
+
+    console.log('ito', userAgent)
 
     if (stored !== fingerPrint) {
       ctx.session.clear()
