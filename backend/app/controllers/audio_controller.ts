@@ -7,9 +7,9 @@ export default class AudioController {
   /**
    * Display a list of resource
    */
-  async index() {
+  async index({ session }: HttpContext) {
     const service = new AudioService()
-    return service.allAudio()
+    return service.allAudio(session)
   }
 
   async store(ctx: HttpContext) {
