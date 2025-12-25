@@ -13,7 +13,7 @@ export default class AudioMiddleware {
       return next()
     }
 
-    console.log('ito', userAgent)
+    console.log('ito', stored)
 
     if (stored !== fingerPrint) {
       ctx.session.clear()
@@ -22,7 +22,6 @@ export default class AudioMiddleware {
       })
     }
 
-    const output = await next()
-    return output
+    return await next()
   }
 }
