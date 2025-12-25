@@ -1,6 +1,7 @@
 import Audio from '#models/audio'
 import { AudioService } from '#services/audio_service'
 import { createAudioValidator } from '#validators/audio_validate'
+import stringHelpers from '@adonisjs/core/helpers/string'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AudioController {
@@ -8,14 +9,19 @@ export default class AudioController {
    * Display a list of resource
    */
   async index({ session }: HttpContext) {
+    const userAgent = await session.all()
+    console.log('ehhhh', userAgent)
     const service = new AudioService()
-    return service.allAudio(session)
+    return service.allAudio()
   }
 
   async store(ctx: HttpContext) {
     const data = ctx.request.all()
-    const usesession = ctx.session.get('audio_finger_print')
-    console.log(usesession)
+    const file = ctx.request.file('audio_file')
+    if (file) {
+      const newName = stringHelpers.generateRandom(32) + '.' + file.extname
+      file.move('./', { name: newName })
+    }
     const validatedData = await createAudioValidator.validate(data)
 
     const audio = await Audio.create(validatedData)
