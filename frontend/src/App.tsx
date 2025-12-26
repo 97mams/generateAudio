@@ -1,11 +1,14 @@
 import { Header } from "./components/header";
+import { Hero } from "./components/hero";
+import { SectionForm } from "./components/sectionForm";
 import { ThemeProvider } from "./components/theme-provider";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Header />
-      <h1>Hello</h1>
+      <Hero />
+      <SectionForm />
     </ThemeProvider>
   );
 }
