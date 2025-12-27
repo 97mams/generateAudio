@@ -1,3 +1,4 @@
+import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
 import { SectionForm } from "./components/sectionForm";
@@ -9,6 +10,7 @@ function App() {
       <Header />
       <Hero />
       <SectionForm />
+      <Footer />
     </ThemeProvider>
   );
 }
