@@ -60,7 +60,8 @@
     "@vinejs/vine": "^3.0.1",
     "luxon": "^3.7.2",
     "mysql2": "^3.15.3",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "simple-tts-mp3": "^1.1.0"
   },
   "hotHook": {
     "boundaries": [

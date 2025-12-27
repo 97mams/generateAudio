@@ -8,9 +8,7 @@ export default class AudioController {
   /**
    * Display a list of resource
    */
-  async index({ session }: HttpContext) {
-    const userAgent = await session.all()
-    console.log('ehhhh', userAgent)
+  async index() {
     const service = new AudioService()
     return service.allAudio()
   }
