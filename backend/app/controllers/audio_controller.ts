@@ -1,29 +1,27 @@
 import Audio from '#models/audio'
 import { AudioService } from '#services/audio_service'
 import { createAudioValidator } from '#validators/audio_validate'
-import stringHelpers from '@adonisjs/core/helpers/string'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class AudioController {
+  constructor(private service: AudioService) {}
   /**
    * Display a list of resource
    */
-  async index() {
-    const service = new AudioService()
-    return service.allAudio()
-  }
+  // async index() {
+  //   const service = new AudioService()
+  //   return service.allAudio()
+  // }
 
-  async store(ctx: HttpContext) {
-    const data = ctx.request.all()
-    const file = ctx.request.file('audio_file')
-    if (file) {
-      const newName = stringHelpers.generateRandom(32) + '.' + file.extname
-      file.move('./', { name: newName })
-    }
+  async store({ request }: HttpContext) {
+    const data = request.all()
+    console.log('data', data)
     const validatedData = await createAudioValidator.validate(data)
-
-    const audio = await Audio.create(validatedData)
-    return audio
+    this.service.createAudio(validatedData)
+    // console.log(validatedData)
+    return { status: 'OK' }
   }
 
   /**

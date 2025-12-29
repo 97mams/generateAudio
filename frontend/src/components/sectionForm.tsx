@@ -1,29 +1,34 @@
 import { DownloadIcon } from "lucide-react";
-import { useState } from "react";
+import { createAudioFile } from "simple-tts-mp3";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
 export function SectionForm() {
-  const [isPending, setIsPending] = useState<boolean>(false);
+  // const [isPending, setIsPending] = useState<boolean>(false);
 
   async function audio(formData: FormData) {
-    console.log(formData.get("text"));
-    const r = await fetch("http://localhost:3333/api/audio", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        text: formData.get("text"),
-        language: formData.get("language"),
-      }),
-    });
+    const text = formData.get("text")?.toString();
+    const language = formData.get("language")?.toString();
 
-    const status = await r.status;
-    if (status) {
-      setIsPending(true);
+    if (text) {
+      const c = await createAudioFile(text, "test", language);
+      console.log(c);
     }
-  }
 
-  console.log(isPending);
+    // const r = await fetch("http://localhost:3333/api/audio", {
+    //   method: "POST",
+    //   headers: { "content-type": "application/json" },
+    //   body: JSON.stringify({
+    //     text: formData.get("text"),
+    //     language: formData.get("language"),
+    //   }),
+    // });
+
+    // const status = await r.status;
+    // if (status) {
+    //   setIsPending(true);
+    // }
+  }
 
   return (
     <div className="w-full flex items-star justify-around m-8">
