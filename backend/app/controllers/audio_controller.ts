@@ -10,18 +10,17 @@ export default class AudioController {
   /**
    * Display a list of resource
    */
-  // async index() {
-  //   const service = new AudioService()
-  //   return service.allAudio()
-  // }
+  async index() {
+    const service = new AudioService()
+    return service.allAudio()
+  }
 
   async store({ request }: HttpContext) {
     const data = request.all()
-    console.log('data', data)
     const validatedData = await createAudioValidator.validate(data)
-    this.service.createAudio(validatedData)
-    // console.log(validatedData)
-    return { status: 'OK' }
+    const gtts = await this.service.createAudio(validatedData)
+
+    return { data: gtts }
   }
 
   /**

@@ -1,5 +1,7 @@
+import app from '@adonisjs/core/services/app'
 import db from '@adonisjs/lucid/services/db'
-import { createAudioFile } from 'simple-tts-mp3'
+import GTTS from 'gtts'
+import fs from 'node:fs'
 
 type AudioData = {
   text: string
@@ -13,16 +15,17 @@ export class AudioService {
   }
 
   async createAudio(data: AudioData | any) {
-    const name = Date.now() + 'mptreo'
-    // const g = new GTTS(data.text, data.langauge)
-    // await g.save('.app/public')
-    const file = await createAudioFile(data.text, name, 'en')
-    console.log('file', file)
-    //   const newName = stringHelpers.generateRandom(32) + '.mp3'
+    const g = new GTTS(data.text, data.langauge)
+    const name = Date.now() + '.mp3'
+    const folder = app.publicPath() + '/uploads'
+    fs.mkdirSync(folder, { recursive: true, mode: 0o755 })
 
-    //   mkdir()
-
-    // const audio = await Audio.create(validatedData)
-    return { status: 'ok' }
+    return new Promise((resolve, reject) =>
+      g.save(folder + name, (error) => {
+        if (error) {
+          console.log(error)
+        } else resolve(folder + name)
+      })
+    )
   }
 }
