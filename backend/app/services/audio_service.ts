@@ -1,7 +1,9 @@
 import app from '@adonisjs/core/services/app'
 import db from '@adonisjs/lucid/services/db'
 import GTTS from 'gtts'
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
+import path from 'node:path'
 
 type AudioData = {
   text: string
@@ -27,5 +29,20 @@ export class AudioService {
         } else resolve(folder + name)
       })
     )
+  }
+
+  async TextToSpeechGenerate(data: AudioData | any) {
+    const timestamp = Date.now()
+    const pathWav = app.publicPath(path.join('wav', timestamp + 'wav'))
+    const pathMp3 = app.publicPath(path.join('mp3', timestamp + 'mp3'))
+
+    execSync(`mkdir -p "${path.dirname('uploads')}`)
+
+    execSync(`espeak "${data.text.replace(/"/g, '\\"')}" --stdout > "${pathWav}"`)
+
+    // Convertit WAV → MP3 avec ffmpeg
+    execSync(`ffmpeg -y -i "${pathWav}" -vn -ar 44100 -ac 2 -b:a 192k "${pathMp3}"`)
+
+    return pathMp3
   }
 }
