@@ -26,6 +26,7 @@ export class AudioService {
       g.save(folder + name, (error) => {
         if (error) {
           console.log(error)
+          reject(error)
         } else resolve(folder + name)
       })
     )
