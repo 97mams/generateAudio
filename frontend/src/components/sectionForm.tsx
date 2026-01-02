@@ -1,33 +1,25 @@
 import { DownloadIcon } from "lucide-react";
-import { createAudioFile } from "simple-tts-mp3";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
 export function SectionForm() {
-  // const [isPending, setIsPending] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   async function audio(formData: FormData) {
-    const text = formData.get("text")?.toString();
-    const language = formData.get("language")?.toString();
+    const r = await fetch("http://localhost:3333/api/audio", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        text: formData.get("text"),
+        language: formData.get("language"),
+      }),
+    });
 
-    if (text) {
-      const c = await createAudioFile(text, "test", language);
-      console.log(c);
+    const status = await r.status;
+    if (status) {
+      setIsPending(true);
     }
-
-    // const r = await fetch("http://localhost:3333/api/audio", {
-    //   method: "POST",
-    //   headers: { "content-type": "application/json" },
-    //   body: JSON.stringify({
-    //     text: formData.get("text"),
-    //     language: formData.get("language"),
-    //   }),
-    // });
-
-    // const status = await r.status;
-    // if (status) {
-    //   setIsPending(true);
-    // }
   }
 
   return (
@@ -45,7 +37,7 @@ export function SectionForm() {
                 <option value="fr">Fr</option>
               </select>
               <Button type="submit" variant={"secondary"}>
-                send
+                {isPending ? "Sending..." : "send"}
               </Button>
             </div>
           </div>

@@ -18,9 +18,10 @@ export default class AudioController {
   async store({ request }: HttpContext) {
     const data = request.all()
     const validatedData = await createAudioValidator.validate(data)
-    const gtts = await this.service.createAudio(validatedData)
+    // const gtts = await this.service.createAudio(validatedData)
+    const espeak = await this.service.TextToSpeechGenerate(validatedData)
 
-    return { data: gtts }
+    return { data: espeak }
   }
 
   /**
