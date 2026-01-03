@@ -19,15 +19,14 @@ export class AudioService {
   async createAudio(data: AudioData | any) {
     const g = new GTTS(data.text, data.langauge)
     const name = Date.now() + '.mp3'
-    const folder = app.publicPath() + '/uploads'
-    fs.mkdirSync(folder, { recursive: true, mode: 0o755 })
+    const folder = app.publicPath(path.join('uploads'), name)
+    fs.mkdirSync(app.publicPath(path.join('uploads')), { recursive: true, mode: 0o755 })
 
     return new Promise((resolve, reject) =>
-      g.save(folder + name, (error) => {
+      g.save(folder, (error) => {
         if (error) {
-          console.log(error)
           reject(error)
-        } else resolve(folder + name)
+        } else resolve(folder)
       })
     )
   }
