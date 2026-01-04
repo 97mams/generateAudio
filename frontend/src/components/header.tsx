@@ -10,9 +10,11 @@ export function Header() {
         <h1 className="font-Bold size-6">Mptreo</h1>
       </div>
       <div className="flex gap-1">
-        <Button>
-          <GithubIcon />
-        </Button>
+        <a target="_blank" href="https://github.com/97mams">
+          <Button>
+            <GithubIcon />
+          </Button>
+        </a>
         <ModeToggle />
       </div>
     </div>
