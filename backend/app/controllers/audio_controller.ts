@@ -3,6 +3,7 @@ import { AudioService } from '#services/audio_service'
 import { createAudioValidator } from '#validators/audio_validate'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
 
 @inject()
 export default class AudioController {
@@ -11,25 +12,31 @@ export default class AudioController {
    * Display a list of resource
    */
   async index() {
-    const service = new AudioService()
-    return service.allAudio()
+    const audios = await Audio.all()
+
+    return audios.map((audio) => ({
+      id: audio.id,
+      name: audio.name,
+      url: `/uploads/${audio.name}`,
+    }))
   }
 
   async store({ request }: HttpContext) {
     const data = request.all()
     const validatedData = await createAudioValidator.validate(data)
-    // const gtts = await this.service.createAudio(validatedData)
-    const espeak = await this.service.TextToSpeechGenerate(validatedData)
+    const espeak = await this.service.createAudio(validatedData)
 
     return { data: espeak }
   }
 
-  /**
-   * Show individual record
-   */
-  async show({ params }: HttpContext) {
-    const audio = await Audio.findOrFail(params.id)
-    return audio
+  async download({ params, response }: HttpContext) {
+    const audio = await Audio.find(params.id)
+
+    if (!audio) {
+      return response.notFound()
+    }
+
+    return response.download(app.makePath('public/uploads', audio.name))
   }
 
   /**

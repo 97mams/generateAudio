@@ -1,5 +1,6 @@
+import Audio from '#models/audio'
+import { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
-import db from '@adonisjs/lucid/services/db'
 import GTTS from 'gtts'
 import { exec } from 'node:child_process'
 import fs from 'node:fs'
@@ -11,22 +12,21 @@ type AudioData = {
 }
 
 export class AudioService {
-  async allAudio() {
-    const audio = await db.from('audio').select('title', 'path')
-    return audio
-  }
+  async allAudio({ response, params }: HttpContext) {}
 
   async createAudio(data: AudioData | any) {
-    const g = new GTTS(data.text, data.langauge)
+    const g = new GTTS(data.text, data.language)
     const name = Date.now() + '.mp3'
     const folder = app.publicPath(path.join('uploads'), name)
     fs.mkdirSync(app.publicPath(path.join('uploads')), { recursive: true, mode: 0o755 })
-
+    await Audio.create({ name: name })
     return new Promise((resolve, reject) =>
       g.save(folder, (error) => {
         if (error) {
           reject(error)
-        } else resolve(folder)
+        } else {
+          resolve(folder)
+        }
       })
     )
   }

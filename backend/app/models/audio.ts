@@ -6,13 +6,7 @@ export default class Audio extends BaseModel {
   declare id: number
 
   @column()
-  declare title: string
-
-  @column()
-  declare path: string
-
-  @column()
-  declare ipUser: string
+  declare name: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
