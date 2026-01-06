@@ -1,5 +1,4 @@
 import Audio from '#models/audio'
-import { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import GTTS from 'gtts'
 import { exec } from 'node:child_process'
@@ -12,8 +11,6 @@ type AudioData = {
 }
 
 export class AudioService {
-  async allAudio({ response, params }: HttpContext) {}
-
   async createAudio(data: AudioData | any) {
     const g = new GTTS(data.text, data.language)
     const name = Date.now() + '.mp3'

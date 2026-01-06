@@ -18,7 +18,9 @@ export default class AudioController {
     return audios.map((audio) => ({
       id: audio.id,
       name: audio.name,
-      url: `/uploads/${audio.name}`,
+      url: `public/uploads/${audio.name}`,
+      download: `/audio/download/${audio.name}`,
+      stream: `/audio/stream/${audio.name}`,
     }))
   }
 
