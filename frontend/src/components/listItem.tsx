@@ -1,4 +1,6 @@
+import { DownloadIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 type propsType = {
   id: number;
@@ -26,15 +28,9 @@ export function ListItems() {
 
   const rendering = items?.map((item) => (
     <div key={item.id}>
-      <div className="flex items-end gap-2">
-        <audio
-          controls
-          src={"http://localhost:3333/uploads/" + item.url}
-        ></audio>
-
-        {/* <figure>
-          <figcaption>Listen:</figcaption>
-          <audio src="">
+      <div className="flex items-end gap-2 mb-2">
+        <figure>
+          <audio controls>
             <source src={"http://localhost:3333/api" + item.stream} />
           </audio>
         </figure>
@@ -43,7 +39,7 @@ export function ListItems() {
           <Button variant={"outline"}>
             <DownloadIcon />
           </Button>
-        </a> */}
+        </a>
       </div>
     </div>
   ));

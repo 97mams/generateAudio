@@ -19,8 +19,8 @@ export default class AudioController {
       id: audio.id,
       name: audio.name,
       url: `public/uploads/${audio.name}`,
-      download: `/audio/download/${audio.name}`,
-      stream: `/audio/stream/${audio.name}`,
+      download: `/audio/${audio.id}/download`,
+      stream: `/audio/${audio.id}/stream`,
     }))
   }
 
@@ -44,14 +44,15 @@ export default class AudioController {
 
   async stream({ params, response }: HttpContext) {
     const audio = await Audio.find(params.id)
-
+    console.log('audio', audio)
     if (!audio) {
       return response.notFound()
     }
-
     const filePath = app.makePath('public/uploads', audio.name)
+    console.log('stream', filePath)
 
     response.header('Content-Type', 'audio/mpeg')
+    response.header('Content-Type', 'application/octoet-stream')
     response.header('Content-Disposition', `inline; filename="${audio.name}"`)
 
     return response.stream(createReadStream(filePath))
