@@ -34,7 +34,7 @@ export function ListItems() {
             <source src={"http://localhost:3333/api" + item.stream} />
           </audio>
         </figure>
-        <a href={item.download}>
+        <a href={"http://localhost:3333/api" + item.download}>
           {" "}
           <Button variant={"outline"}>
             <DownloadIcon />

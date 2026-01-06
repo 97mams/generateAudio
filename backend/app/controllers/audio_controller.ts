@@ -39,17 +39,15 @@ export default class AudioController {
       return response.notFound()
     }
 
-    return response.download(app.makePath('public/uploads', audio.name))
+    return response.attachment(app.makePath('public/uploads', audio.name), audio.name)
   }
 
   async stream({ params, response }: HttpContext) {
     const audio = await Audio.find(params.id)
-    console.log('audio', audio)
     if (!audio) {
       return response.notFound()
     }
     const filePath = app.makePath('public/uploads', audio.name)
-    console.log('stream', filePath)
 
     response.header('Content-Type', 'audio/mpeg')
     response.header('Content-Type', 'application/octoet-stream')
