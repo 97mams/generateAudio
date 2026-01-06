@@ -1,6 +1,7 @@
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
+import { ListItems } from "./components/listItem";
 import { SectionForm } from "./components/sectionForm";
 import { ThemeProvider } from "./components/theme-provider";
 
@@ -9,7 +10,10 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Header />
       <Hero />
-      <SectionForm />
+      <div className="flex justify-around">
+        <SectionForm />
+        <ListItems />
+      </div>
       <Footer />
     </ThemeProvider>
   );
