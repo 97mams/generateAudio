@@ -1,9 +1,10 @@
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 type propsType = {
-  id: number;
+  id: string;
   url: string;
   download: string;
   stream: string;
@@ -11,9 +12,11 @@ type propsType = {
 
 export function ListItems() {
   const [items, setItems] = useState<propsType>();
+
+  const url = "http://localhost:3333/api/audio";
+
   useEffect(() => {
     const fetchData = async () => {
-      const url = "http://localhost:3333/api/audio";
       const response = await fetch(url, {
         method: "get",
         headers: {
@@ -25,6 +28,21 @@ export function ListItems() {
     };
     fetchData();
   }, []);
+
+  const handlerDelete = (id: string) => {
+    const newItem = items?.filter((item) => item.id != id);
+    setItems(newItem);
+    fetch(url + "/" + id, {
+      method: "delete",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.success) toast("Audio deleted successfully");
+      });
+  };
 
   const rendering = items?.map((item) => (
     <div key={item.id}>
@@ -40,6 +58,9 @@ export function ListItems() {
             <DownloadIcon />
           </Button>
         </a>
+        <Button variant={"destructive"} onClick={() => handlerDelete(item.id)}>
+          <Trash2 />
+        </Button>
       </div>
     </div>
   ));
