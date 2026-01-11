@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
 export function SectionForm() {
-  // const [isPending, setIsPending] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   async function audio(formData: FormData) {
-    await fetch("http://localhost:3333/api/audio", {
+    const r = await fetch("http://localhost:3333/api/audio", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -14,10 +15,10 @@ export function SectionForm() {
       }),
     });
     //
-    // const status = await r.status;
-    // if (status) {
-    //   setIsPending(true);
-    // }
+    const status = r.status;
+    if (status) {
+      setIsPending(true);
+    }
   }
 
   return (
@@ -33,9 +34,7 @@ export function SectionForm() {
               <option value="en">En</option>
               <option value="fr">Fr</option>
             </select>
-            <Button type="submit" variant={"secondary"}>
-              {/* {isPending ? "Sending..." : "send"} */}send
-            </Button>
+            <Button type="submit">{isPending ? "Sending..." : "send"}</Button>
           </div>
         </div>
       </form>
