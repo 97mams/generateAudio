@@ -6,18 +6,20 @@ export function SectionForm() {
   const [isPending, setIsPending] = useState<boolean>(false);
 
   async function audio(formData: FormData) {
-    const r = await fetch("http://localhost:3333/api/audio", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        text: formData.get("text"),
-        language: formData.get("language"),
-      }),
-    });
-    //
-    const status = r.status;
-    if (status) {
-      setIsPending(true);
+    setIsPending(true);
+    try {
+      await fetch("http://localhost:3333/api/audio", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          text: formData.get("text"),
+          language: formData.get("language"),
+        }),
+      });
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+    } finally {
+      setIsPending(false);
     }
   }
 
