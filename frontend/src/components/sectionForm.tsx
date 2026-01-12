@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
@@ -8,7 +9,7 @@ export function SectionForm() {
   async function audio(formData: FormData) {
     setIsPending(true);
     try {
-      await fetch("http://localhost:3333/api/audio", {
+      const respose = await fetch("http://localhost:3333/api/audio", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -16,6 +17,10 @@ export function SectionForm() {
           language: formData.get("language"),
         }),
       });
+
+      if (respose.ok) {
+        toast.success("Audio created successfully!");
+      }
     } catch (error) {
       console.error("Error parsing JSON:", error);
     } finally {
