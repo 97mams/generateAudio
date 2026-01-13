@@ -3,7 +3,14 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
-export function SectionForm() {
+type propsType = {
+  id: string;
+  url: string;
+  download: string;
+  stream: string;
+};
+
+export function SectionForm({ onCreated }) {
   const [isPending, setIsPending] = useState<boolean>(false);
 
   async function audio(formData: FormData) {
@@ -19,6 +26,7 @@ export function SectionForm() {
       });
 
       if (respose.ok) {
+        onCreated(respose.json());
         toast.success("Audio created successfully!");
       }
     } catch (error) {

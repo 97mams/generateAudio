@@ -1,5 +1,5 @@
 import { DownloadIcon, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 
@@ -10,29 +10,11 @@ type propsType = {
   stream: string;
 }[];
 
-export function ListItems() {
-  const [items, setItems] = useState<propsType>();
-
-  const url = "http://localhost:3333/api/audio";
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(url, {
-        method: "get",
-        headers: {
-          "content-type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setItems(data);
-    };
-    fetchData();
-  }, []);
-
+export function ListItems(props: { items: propsType }) {
+  const [items, setItems] = useState<propsType>(props.items);
   const handlerDelete = (id: string) => {
-    const newItem = items?.filter((item) => item.id != id);
-    setItems(newItem);
-    fetch(url + "/" + id, {
+    const newItem = props.items?.filter((item) => item.id != id);
+    fetch("http://localhost:3333/api/audio/" + id, {
       method: "delete",
       headers: {
         "content-type": "application/json",
@@ -42,9 +24,10 @@ export function ListItems() {
       .then((data) => {
         if (data.success) toast("Audio deleted successfully");
       });
+    setItems(newItem);
   };
 
-  const rendering = items?.map((item) => (
+  const rendering = props.items?.map((item) => (
     <div key={item.id}>
       <div className="flex items-end gap-2 mb-2">
         <figure>
