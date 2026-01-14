@@ -27,9 +27,8 @@ export default class AudioController {
   async store({ request }: HttpContext) {
     const data = request.all()
     const validatedData = await createAudioValidator.validate(data)
-    const espeak = await this.service.createAudio(validatedData)
 
-    return { data: espeak }
+    return this.service.createAudio(validatedData)
   }
 
   async download({ params, response }: HttpContext) {
