@@ -1,19 +1,11 @@
 import { DownloadIcon, Trash2 } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import type { dataType } from "@/App";
 
-type propsType = {
-  id: string;
-  url: string;
-  download: string;
-  stream: string;
-}[];
-
-export function ListItems(props: { items: propsType }) {
-  const [items, setItems] = useState<propsType>(props.items);
+export function ListItems(props: { items: dataType[] }) {
   const handlerDelete = (id: string) => {
-    const newItem = props.items?.filter((item) => item.id != id);
+    // const newItem = props.items?.filter((item) => item.id != id);
     fetch("http://localhost:3333/api/audio/" + id, {
       method: "delete",
       headers: {
@@ -24,7 +16,6 @@ export function ListItems(props: { items: propsType }) {
       .then((data) => {
         if (data.success) toast("Audio deleted successfully");
       });
-    setItems(newItem);
   };
 
   const rendering = props.items?.map((item) => (
@@ -48,5 +39,5 @@ export function ListItems(props: { items: propsType }) {
     </div>
   ));
 
-  return <div>{items?.length === 0 ? "" : rendering}</div>;
+  return <div>{props.items?.length === 0 ? "" : rendering}</div>;
 }

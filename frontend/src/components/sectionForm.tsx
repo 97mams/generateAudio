@@ -1,20 +1,17 @@
+import type { dataType } from "@/App";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
-type propsType = {
-  id: string;
-  url: string;
-  download: string;
-  stream: string;
-};
-
-export function SectionForm({ onCreated }) {
+export function SectionForm({
+  onCreated,
+}: {
+  onCreated: (data: dataType) => void;
+}) {
   const [isPending, setIsPending] = useState<boolean>(false);
 
   async function audio(formData: FormData) {
-    setIsPending(true);
     try {
       const respose = await fetch("http://localhost:3333/api/audio", {
         method: "POST",
@@ -26,7 +23,8 @@ export function SectionForm({ onCreated }) {
       });
 
       if (respose.ok) {
-        onCreated(respose.json());
+        onCreated(await respose.json());
+        setIsPending(true);
         toast.success("Audio created successfully!");
       }
     } catch (error) {
