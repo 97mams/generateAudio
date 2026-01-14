@@ -61,6 +61,6 @@ export default class AudioController {
   async destroy({ params }: HttpContext) {
     const audio = await Audio.findOrFail(params.id)
     await audio.delete()
-    return { message: 'Audio deleted successfully' }
+    return { message: await this.service.removeAudioFile(params.id) }
   }
 }

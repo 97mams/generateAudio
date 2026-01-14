@@ -49,4 +49,15 @@ export class AudioService {
 
     return pathMp3
   }
+
+  async removeAudioFile(id: number): Promise<String> {
+    const audio = await Audio.findOrFail(id)
+    const fileName = audio.name
+    const filePath = app.publicPath(path.join('uploads', fileName))
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath)
+      return 'Audio deleted successfully'
+    }
+    return 'Audio file does not exist'
+  }
 }
