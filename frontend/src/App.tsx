@@ -36,13 +36,18 @@ function App() {
     setItems([...items, data]);
   };
 
+  const handleDelete = (id: string) => {
+    const newItem = items.filter((item) => item.id != id);
+    setItems(newItem);
+  };
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Header />
       <Hero />
       <div className="flex justify-around">
         <SectionForm onCreated={handlePostCreated} />
-        <ListItems items={items} />
+        <ListItems items={items} onDelete={handleDelete} />
       </div>
       <Footer />
     </ThemeProvider>

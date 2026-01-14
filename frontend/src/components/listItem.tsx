@@ -3,9 +3,11 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import type { dataType } from "@/App";
 
-export function ListItems(props: { items: dataType[] }) {
+export function ListItems(props: {
+  items: dataType[];
+  onDelete?: (id: string) => void;
+}) {
   const handlerDelete = (id: string) => {
-    // const newItem = props.items?.filter((item) => item.id != id);
     fetch("http://localhost:3333/api/audio/" + id, {
       method: "delete",
       headers: {
@@ -13,8 +15,9 @@ export function ListItems(props: { items: dataType[] }) {
       },
     })
       .then((resp) => resp.json())
-      .then((data) => {
-        if (data.success) toast("Audio deleted successfully");
+      .then(() => {
+        props.onDelete?.(id);
+        toast.success("Audio deleted successfull");
       });
   };
 
