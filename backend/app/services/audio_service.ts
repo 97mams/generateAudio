@@ -16,13 +16,13 @@ export class AudioService {
     const name = Date.now() + '.mp3'
     const folder = app.publicPath(path.join('uploads'), name)
     fs.mkdirSync(app.publicPath(path.join('uploads')), { recursive: true, mode: 0o755 })
-    const audio = await Audio.create({ name: name })
+    await Audio.create({ name: name })
     return new Promise((resolve, reject) =>
-      g.save(folder, (error) => {
+      g.save(folder, async (error) => {
         if (error) {
           reject(error)
         } else {
-          resolve(audio)
+          resolve(await this.getAudio(name))
         }
       })
     )
@@ -59,5 +59,16 @@ export class AudioService {
       return 'Audio deleted successfully'
     }
     return 'Audio file does not exist'
+  }
+
+  private async getAudio(name: string) {
+    const audio = await Audio.findBy('name', name)
+    return {
+      id: audio?.id,
+      name: audio?.name,
+      url: `public/uploads/${audio?.name}`,
+      download: `/audio/${audio?.id}/download`,
+      stream: `/audio/${audio?.id}/stream`,
+    }
   }
 }
