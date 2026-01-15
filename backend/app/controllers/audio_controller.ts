@@ -12,7 +12,8 @@ export default class AudioController {
   /**
    * Display a list of resource
    */
-  async index() {
+  async index({ request }: HttpContext) {
+    request.header('user-agent')
     const audios = await Audio.all()
 
     return audios.map((audio) => ({
@@ -60,7 +61,11 @@ export default class AudioController {
    */
   async destroy({ params }: HttpContext) {
     const audio = await Audio.findOrFail(params.id)
-    await audio.delete()
-    return { message: await this.service.removeAudioFile(params.id) }
+    const deleted = await this.service.removeAudioFile(params.id)
+    if (deleted) {
+      await audio.delete()
+      return { message: 'Audio deleted successfully' }
+    }
+    return { message: 'Audio file does not exist' }
   }
 }
