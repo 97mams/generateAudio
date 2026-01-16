@@ -44,16 +44,13 @@ export function SectionForm({
     }
   }
 
-  console.log("isPending:", isPending);
-
   return (
     <div className="w-md">
       <form action={audio}>
-        <div className="w-full flex gap-2">
+        <div className="w-full flex justify-center items-center md:items-start flex-row gap-2">
           <Textarea
             name="text"
-            className={borderColor}
-            rows={20}
+            className={borderColor + "w-85 md:h-80"}
             placeholder="your text ..."
           />
           <div className="flex flex-col gap-2">
