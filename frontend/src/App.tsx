@@ -45,7 +45,7 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Header />
       <Hero />
-      <div className="flex justify-around">
+      <div className="flex flex-col gap-2 md:flex-row items-center md:items-start md:justify-around">
         <SectionForm onCreated={handlePostCreated} />
         <ListItems items={items} onDelete={handleDelete} />
       </div>
