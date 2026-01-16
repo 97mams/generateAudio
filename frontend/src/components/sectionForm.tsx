@@ -50,7 +50,7 @@ export function SectionForm({
         <div className="w-full flex justify-center items-center md:items-start flex-row gap-2">
           <Textarea
             name="text"
-            className={borderColor + "w-85 md:h-80"}
+            className={borderColor + " w-85 md:h-80"}
             placeholder="your text ..."
           />
           <div className="flex flex-col gap-2">
