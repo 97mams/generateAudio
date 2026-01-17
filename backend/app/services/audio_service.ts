@@ -12,6 +12,10 @@ type AudioData = {
 
 export class AudioService {
   async createAudio(data: AudioData | any) {
+    const length = data.text.length
+
+    console.log('Text length:', length)
+
     const g = new GTTS(data.text, data.language)
     const name = Date.now() + '.mp3'
     const folder = app.publicPath(path.join('uploads'), name)
