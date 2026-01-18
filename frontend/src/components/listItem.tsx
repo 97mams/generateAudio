@@ -1,7 +1,7 @@
+import type { dataType } from "@/App";
 import { DownloadIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import type { dataType } from "@/App";
 
 export function ListItems(props: {
   items: dataType[];
@@ -22,7 +22,7 @@ export function ListItems(props: {
   };
 
   const rendering = props.items?.map((item) => (
-    <div key={item.id}>
+    <div key={item.id} className="w-full">
       <div className="flex items-end gap-2 mb-2">
         <figure>
           <audio controls>
@@ -42,5 +42,9 @@ export function ListItems(props: {
     </div>
   ));
 
-  return <div>{props.items?.length === 0 ? "" : rendering}</div>;
+  return (
+    <div className="w-md h-96 overflow-y-auto">
+      {props.items?.length === 0 ? "" : rendering}
+    </div>
+  );
 }
