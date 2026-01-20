@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
-const API_URL = import.meta.env.API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export function ListItems({
   items,
@@ -15,6 +15,7 @@ export function ListItems({
   isPending?: boolean;
   onDelete?: (id: string) => void;
 }) {
+  console.log("url", API_URL);
   const handlerDelete = async (id: string) => {
     try {
       const resp = await fetch(`${API_URL}/audio/${id}`, {
@@ -49,7 +50,7 @@ export function ListItems({
       {items.length === 0 && sekeletonRender()}
       {items.map((item) => (
         <div key={item.id} className="flex items-end gap-2 mb-2">
-          <audio controls preload="none">
+          <audio controls>
             <source src={`${API_URL}${item.stream}`} />
           </audio>
 
