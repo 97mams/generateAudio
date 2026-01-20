@@ -15,6 +15,7 @@ export type dataType = {
 
 function App() {
   const [items, setItems] = useState<dataType[]>([]);
+  const [is, setIs] = useState<boolean>(false);
 
   const url = "http://localhost:3333/api/audio";
 
@@ -41,13 +42,17 @@ function App() {
     setItems(newItem);
   };
 
+  const isPending = (state: boolean) => {
+    setIs(state);
+  };
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Header />
       <Hero />
       <div className="flex flex-col gap-2 md:flex-row items-center md:items-start md:justify-around">
-        <SectionForm onCreated={handlePostCreated} />
-        <ListItems items={items} onDelete={handleDelete} />
+        <SectionForm isPending={isPending} onCreated={handlePostCreated} />
+        <ListItems isPending={is} items={items} onDelete={handleDelete} />
       </div>
       <Footer />
     </ThemeProvider>
