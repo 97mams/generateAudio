@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export function SectionForm({
   onCreated,
   isPending,
@@ -22,7 +24,7 @@ export function SectionForm({
       return;
     }
     try {
-      const respose = await fetch("http://localhost:3333/api/audio", {
+      const respose = await fetch(`${API_URL}/audio`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
