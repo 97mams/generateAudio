@@ -7,10 +7,12 @@ import { Textarea } from "./ui/textarea";
 
 export function SectionForm({
   onCreated,
+  isPending,
 }: {
   onCreated: (data: dataType) => void;
+  isPending: (state: boolean) => void;
 }) {
-  const [isPending, setIsPending] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [borderColor, setBorderColor] = useState<string>("");
 
   async function audio(formData: FormData) {
@@ -37,9 +39,11 @@ export function SectionForm({
       console.error("Error parsing JSON:", error);
     } finally {
       setBorderColor("");
-      setIsPending(true);
+      isPending(true);
+      setIsLoading(true);
       setTimeout(() => {
-        setIsPending(false);
+        isPending(false);
+        setIsLoading(false);
       }, 1000);
     }
   }
@@ -62,7 +66,7 @@ export function SectionForm({
               <option value="fr">Fr</option>
             </select>
             <Button type="submit" className={borderColor}>
-              {isPending ? <Loader className="animate-spin" /> : "send"}
+              {isLoading ? <Loader className="animate-spin" /> : "send"}
             </Button>
           </div>
         </div>
