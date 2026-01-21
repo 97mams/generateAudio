@@ -30,28 +30,6 @@ export class AudioService {
     )
   }
 
-  async TextToSpeechGenerate(data: AudioData | any) {
-    const timestamp = Date.now()
-
-    const publicP = app.publicPath()
-    const pathWav = app.publicPath(path.join('wav'))
-    const pathMp3 = app.publicPath(path.join('mp3'))
-
-    await exec(`mkdir -p "${pathWav}"`)
-    await exec(`mkdir -p "${pathMp3}"`)
-
-    await exec(`espeak "${data.text.replace(/"/g, '\\"')}" --stdout > "${pathWav + timestamp}.wav"`)
-
-    // Convertit WAV → MP3 avec ffmpeg
-    const m = await exec(
-      `ffmpeg -y -i "${publicP + timestamp}.wav" -vn -ar 44100 -ac 2 -b:a 192k "${pathMp3 + timestamp}.mp3"`
-    )
-
-    console.log(m)
-
-    return pathMp3
-  }
-
   async removeAudioFile(id: number): Promise<boolean> {
     const audio = await Audio.findOrFail(id)
     const fileName = audio.name
