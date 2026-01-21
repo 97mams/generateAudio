@@ -12,6 +12,8 @@ type AudioData = {
 
 export class AudioService {
   async createAudio(data: AudioData | any) {
+    //252 mots max
+    console.log('length:', data.text.length)
     const g = new GTTS(data.text, data.language)
     const name = Date.now() + '.mp3'
     const folder = app.publicPath(path.join('uploads'), name)
@@ -71,5 +73,33 @@ export class AudioService {
       download: `/audio/${audio?.id}/download`,
       stream: `/audio/${audio?.id}/stream`,
     }
+  }
+
+  private splitTextIntoChunks(text: string, maxWords: number): string[] {
+    const words = text.split(' ')
+    const chunks: string[] = []
+    for (let i = 0; i < words.length; i += maxWords) {
+      const chunk = words.slice(i, i + maxWords).join(' ')
+      chunks.push(chunk)
+    }
+    return chunks
+  }
+
+  private concatAudioFiles(fileList: string[], outputFile: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const fileListPath = 'filelist.txt'
+      const fileContent = fileList.map((file) => `file '${file}'`).join('\n')
+      fs.writeFileSync(fileListPath, fileContent)
+
+      const command = `ffmpeg -f concat -safe 0 -i ${fileListPath} -c copy ${outputFile}`
+      exec(command, (error) => {
+        fs.unlinkSync(fileListPath)
+        if (error) {
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 }
