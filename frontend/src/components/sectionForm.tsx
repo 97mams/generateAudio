@@ -63,6 +63,7 @@ export function SectionForm({ onCreated, isPending }: Props) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     submit(formData);
+    e.currentTarget.reset();
   }
 
   return (
