@@ -7,68 +7,87 @@ import { Textarea } from "./ui/textarea";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export function SectionForm({
-  onCreated,
-  isPending,
-}: {
+type Props = {
   onCreated: (data: dataType) => void;
   isPending: (state: boolean) => void;
-}) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [borderColor, setBorderColor] = useState<string>("");
+};
 
-  async function audio(formData: FormData) {
-    if (formData.get("text") == "") {
+export function SectionForm({ onCreated, isPending }: Props) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [borderColor, setBorderColor] = useState("");
+
+  async function submit(formData: FormData) {
+    const text = formData.get("text");
+    const language = formData.get("language");
+
+    if (typeof text !== "string" || text.trim() === "") {
       setBorderColor("border-red-500");
       toast.error("Please fill in the text field.");
       return;
     }
+
     try {
-      const respose = await fetch(`${API_URL}/audio`, {
+      setIsLoading(true);
+      isPending(true);
+
+      const response = await fetch(`${API_URL}/audio`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          text: formData.get("text"),
-          language: formData.get("language"),
+          text,
+          language,
         }),
       });
 
-      if (respose.ok) {
-        onCreated(await respose.json());
-        toast.success("Audio created successfully!");
+      if (!response.ok) {
+        toast.error("Failed to create audio.");
+        return;
       }
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-    } finally {
+
+      const data: dataType = await response.json();
+      onCreated(data);
+      toast.success("Audio created successfully!");
       setBorderColor("");
-      isPending(true);
-      setIsLoading(true);
-      setTimeout(() => {
-        isPending(false);
-        setIsLoading(false);
-      }, 1000);
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+      isPending(false);
     }
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    submit(formData);
   }
 
   return (
     <div className="w-md">
-      <form action={audio}>
+      <form onSubmit={handleSubmit}>
         <div className="w-full flex justify-center items-center md:items-start flex-row gap-2">
           <Textarea
             name="text"
-            className={borderColor + " w-85 md:h-80"}
             placeholder="your text ..."
+            className={`${borderColor} w-85 md:h-80`}
+            onChange={() => setBorderColor("")}
           />
+
           <div className="flex flex-col gap-2">
             <select
-              className="border w-11 border-accent rounded"
               name="language"
+              className="border w-11 border-accent rounded"
+              defaultValue="en"
             >
               <option value="en">En</option>
               <option value="fr">Fr</option>
             </select>
-            <Button type="submit" className={borderColor}>
-              {isLoading ? <Loader className="animate-spin" /> : "send"}
+
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? <Loader className="animate-spin" /> : "Send"}
             </Button>
           </div>
         </div>
