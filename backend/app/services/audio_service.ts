@@ -1,8 +1,13 @@
 import Audio from '#models/audio'
 import app from '@adonisjs/core/services/app'
+import ffmpegPath from 'ffmpeg-static'
 import GTTS from 'gtts'
 import fs from 'node:fs'
 import path from 'node:path'
+
+import ffmpeg from 'fluent-ffmpeg'
+
+ffmpeg.setFfmpegPath(ffmpegPath as unknown as string)
 
 type AudioData = {
   text: string
@@ -52,5 +57,21 @@ export class AudioService {
       download: `/audio/${audio?.id}/download`,
       stream: `/audio/${audio?.id}/stream`,
     }
+  }
+
+  private mixAudio(audio1: string, audio2: string, output: string) {
+    return new Promise((resolve, reject) => {
+      ffmpeg()
+        .input(audio1)
+        .input(audio2)
+        .on('error', (err: any) => {
+          reject(err)
+        })
+        .output(output)
+        .on('end', () => {
+          resolve(output)
+        })
+        .run()
+    })
   }
 }
