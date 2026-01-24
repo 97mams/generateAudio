@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import ffmpeg from 'fluent-ffmpeg'
+import { parseFile } from 'music-metadata'
 
 ffmpeg.setFfmpegPath(ffmpegPath as unknown as string)
 
@@ -73,6 +74,11 @@ export class AudioService {
         })
         .run()
     })
+  }
+
+  private async getAudioDuration(filePath: string) {
+    const metadata = await parseFile(filePath)
+    return metadata.format.duration
   }
 
   private formatDuration(seconds: number) {
