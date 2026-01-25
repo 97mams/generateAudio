@@ -16,8 +16,12 @@ type AudioData = {
 }
 
 export class AudioService {
-  createAudio(data: AudioData | any) {
-    return this.generateAudio(data.text, data.language)
+  async createAudio(data: AudioData | any) {
+    const audio1: string = (await this.generateAudio(data.text, data.language)) as string
+
+    const duration = this.getAudioDuration(audio1)
+
+    console.log(duration)
   }
 
   async removeAudioFile(id: number): Promise<boolean> {
