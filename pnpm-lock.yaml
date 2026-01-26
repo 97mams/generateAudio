@@ -47,6 +47,9 @@ importers:
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
+      mp3-cutter:
+        specifier: ^1.0.6
+        version: 1.0.6
       music-metadata:
         specifier: ^11.10.6
         version: 11.10.6
@@ -3199,6 +3202,11 @@ packages:
   mkdirp@3.0.1:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
+    hasBin: true
+
+  mp3-cutter@1.0.6:
+    resolution: {integrity: sha512-5lEKhu9BFcf/9hZaiwGI5EFjL+ynwM9+IaDzxLTKgvG/JWJHLQgX65Xa/kOJgjJMNT1tuUkjpbjaiB735LFiyg==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     hasBin: true
 
   ms@2.1.2:
@@ -7447,6 +7455,8 @@ snapshots:
   minimist@1.2.8: {}
 
   mkdirp@3.0.1: {}
+
+  mp3-cutter@1.0.6: {}
 
   ms@2.1.2: {}
 
