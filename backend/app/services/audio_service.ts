@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import ffmpeg from 'fluent-ffmpeg'
+import mp3Cutter from 'mp3-cutter'
 import { parseFile } from 'music-metadata'
 
 ffmpeg.setFfmpegPath(ffmpegPath as unknown as string)
@@ -22,6 +23,7 @@ export class AudioService {
     const duration = this.getAudioDuration(audio1)
 
     console.log(duration)
+    return audio1
   }
 
   async removeAudioFile(id: number): Promise<boolean> {
@@ -89,5 +91,14 @@ export class AudioService {
     const min = Math.floor(seconds / 60)
     const sec = Math.floor(seconds % 60)
     return `${min}:${sec.toString().padStart(2, '0')}`
+  }
+
+  private audiCutte(audio: string, duration: number, pathOutPut: string) {
+    mp3Cutter.cut({
+      src: audio,
+      target: pathOutPut,
+      start: 0,
+      end: duration,
+    })
   }
 }
