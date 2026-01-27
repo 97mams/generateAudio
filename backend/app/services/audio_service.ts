@@ -18,12 +18,7 @@ type AudioData = {
 
 export class AudioService {
   async createAudio(data: AudioData | any) {
-    const audio1: string = (await this.generateAudio(data.text, data.language)) as string
-
-    const duration = this.getAudioDuration(audio1)
-
-    console.log(duration)
-    return audio1
+    return await this.generateAudio(data.text, data.language)
   }
 
   async removeAudioFile(id: number): Promise<boolean> {
@@ -93,10 +88,13 @@ export class AudioService {
     return `${min}:${sec.toString().padStart(2, '0')}`
   }
 
-  private audiCutte(audio: string, duration: number, pathOutPut: string) {
+  private audiCutte(duration: number, name: string) {
+    const bgAudio = app.publicPath('backgroundAudio/bg.mp3')
+    const folder = app.publicPath(path.join('cutte'), name)
+    fs.mkdirSync(app.publicPath(path.join('cutte')), { recursive: true, mode: 0o755 })
     mp3Cutter.cut({
-      src: audio,
-      target: pathOutPut,
+      src: bgAudio,
+      target: folder,
       start: 0,
       end: duration,
     })
