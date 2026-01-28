@@ -18,7 +18,12 @@ type AudioData = {
 
 export class AudioService {
   async createAudio(data: AudioData | any) {
-    return await this.generateAudio(data.text, data.language)
+    const folder: { folder: string; name: string } = await this.generateAudio(
+      data.text,
+      data.language
+    )
+    const durationInSeconds = await this.getAudioDuration(folder.folder as string)
+    this.audiCutte(durationInSeconds, '1', folder.name)
   }
 
   async removeAudioFile(id: number): Promise<boolean> {
@@ -26,14 +31,16 @@ export class AudioService {
     const fileName = audio.name
     const filePath = app.publicPath(path.join('uploads', fileName))
     if (fs.existsSync(filePath)) {
-      console.log('deleted')
       fs.unlinkSync(filePath)
       return true
     }
     return false
   }
 
-  private async generateAudio(text: string, language: string) {
+  private async generateAudio(
+    text: string,
+    language: string
+  ): Promise<{ folder: string; name: string }> {
     const g = new GTTS(text, language)
     const name = Date.now() + '.mp3'
     const folder = app.publicPath(path.join('uploads'), name)
@@ -44,7 +51,7 @@ export class AudioService {
         if (error) {
           reject(error)
         } else {
-          resolve(await this.getAudio(name))
+          resolve({ folder, name })
         }
       })
     )
@@ -78,8 +85,11 @@ export class AudioService {
   }
 
   private async getAudioDuration(filePath: string) {
-    const metadata = await parseFile(filePath)
-    return metadata.format.duration
+    if (fs.existsSync(filePath)) {
+      const metadata = await parseFile(filePath)
+      return metadata.format.duration
+    }
+    return 0
   }
 
   private formatDuration(seconds: number) {
@@ -88,15 +98,18 @@ export class AudioService {
     return `${min}:${sec.toString().padStart(2, '0')}`
   }
 
-  private audiCutte(duration: number, name: string) {
-    const bgAudio = app.publicPath('backgroundAudio/bg.mp3')
-    const folder = app.publicPath(path.join('cutte'), name)
-    fs.mkdirSync(app.publicPath(path.join('cutte')), { recursive: true, mode: 0o755 })
-    mp3Cutter.cut({
-      src: bgAudio,
-      target: folder,
-      start: 0,
-      end: duration,
-    })
+  private audiCutte(duration?: number, name?: string, nameFile?: string) {
+    if (name && duration) {
+      const bgAudio = app.publicPath(`backgroundAudio/${name}.mp3`)
+      console.log('duration', bgAudio)
+      const folder = app.publicPath(path.join('cutte'), nameFile + '.mp3')
+      fs.mkdirSync(app.publicPath(path.join('cutte')), { recursive: true, mode: 0o755 })
+      mp3Cutter.cut({
+        src: bgAudio,
+        target: folder,
+        start: 0,
+        end: duration,
+      })
+    }
   }
 }
