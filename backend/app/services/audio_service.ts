@@ -92,12 +92,6 @@ export class AudioService {
     return 0
   }
 
-  private formatDuration(seconds: number) {
-    const min = Math.floor(seconds / 60)
-    const sec = Math.floor(seconds % 60)
-    return `${min}:${sec.toString().padStart(2, '0')}`
-  }
-
   private audiCutte(duration?: number, name?: string, nameFile?: string) {
     if (name && duration) {
       const bgAudio = app.publicPath(`backgroundAudio/${name}.mp3`)
