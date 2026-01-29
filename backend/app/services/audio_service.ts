@@ -24,6 +24,9 @@ export class AudioService {
     )
     const durationInSeconds = await this.getAudioDuration(folder.folder as string)
     this.audiCutte(durationInSeconds, '1', folder.name)
+    const mix = await this.mixAudio(folder.name)
+    console.log('mix', mix)
+    // return this.getAudio(mix)
   }
 
   async removeAudioFile(id: number): Promise<boolean> {
@@ -68,17 +71,24 @@ export class AudioService {
     }
   }
 
-  private mixAudio(audio1: string, audio2: string, output: string) {
+  private mixAudio(audio: string) {
+    const audio1 = app.publicPath(path.join('uploads', audio))
+    const audio2 = app.publicPath(path.join('cutte', audio))
+
+    console.log('audio1', audio1)
+    console.log('audio2', audio2)
+    const output = app.publicPath(path.join('mixedAudio', `mixed_${audio}.mp3`))
+    fs.mkdirSync(app.publicPath(path.join('mixedAudio')), { recursive: true, mode: 0o755 })
     return new Promise((resolve, reject) => {
       ffmpeg()
         .input(audio1)
         .input(audio2)
         .on('error', (err: any) => {
-          reject(err)
+          reject('tsy mety ny mix ' + err.message)
         })
         .output(output)
         .on('end', () => {
-          resolve(output)
+          resolve(audio)
         })
         .run()
     })
