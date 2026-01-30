@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,node
 
-### Node ###
-=======
->>>>>>> 266d73ec9cee223941da2c2757d2d897dbfd1efa
 # Logs
 logs
 *.log
@@ -22,7 +16,6 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-<<<<<<< HEAD
 !.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
@@ -37,7 +30,6 @@ dist-ssr
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node
-=======
 .idea
 .DS_Store
 *.suo
@@ -45,7 +37,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
->>>>>>> 266d73ec9cee223941da2c2757d2d897dbfd1efa
+
 
 node_modules
 dist
