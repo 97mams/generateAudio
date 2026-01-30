@@ -77,6 +77,8 @@ export class AudioService {
     const outputDir = app.publicPath('mixedAudio')
     const output = path.join(outputDir, `mixed_${splintNameAudio[0]}.wav`)
 
+    const delayMs = 500
+
     if (!fs.existsSync(audio1)) {
       throw new Error(`Audio1 introuvable: ${audio1}`)
     }
@@ -96,6 +98,11 @@ export class AudioService {
         .complexFilter([
           { filter: 'volume', options: '1.0', inputs: '0:a', outputs: 'a1' },
           { filter: 'volume', options: '0.2', inputs: '1:a', outputs: 'a2' },
+          {
+            filter: 'adelay',
+            options: `${delayMs}|${delayMs}`,
+            inputs: ['voice', 'bg'],
+          },
           {
             filter: 'amix',
             options: { inputs: 2, dropout_transition: 0 },
