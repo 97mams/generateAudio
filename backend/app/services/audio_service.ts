@@ -77,7 +77,7 @@ export class AudioService {
     const outputDir = app.publicPath('mixedAudio')
     const output = path.join(outputDir, `mixed_${splintNameAudio[0]}.wav`)
 
-    const delayMs = 500
+    const delayMs = 1000
 
     if (!fs.existsSync(audio1)) {
       throw new Error(`Audio1 introuvable: ${audio1}`)
@@ -95,20 +95,13 @@ export class AudioService {
         .input(audio2)
 
         // 🎚 audio2 plus faible
-        .complexFilter([
-          { filter: 'volume', options: '1.0', inputs: '0:a', outputs: 'a1' },
-          { filter: 'volume', options: '0.2', inputs: '1:a', outputs: 'a2' },
-          {
-            filter: 'adelay',
-            options: `${delayMs}|${delayMs}`,
-            inputs: ['voice', 'bg'],
-          },
-          {
-            filter: 'amix',
-            options: { inputs: 2, dropout_transition: 0 },
-            inputs: ['a1', 'a2'],
-          },
-        ])
+        .complexFilter(
+          `
+      [0:a]aformat=channel_layouts=stereo,adelay=${delayMs},volume=1.0[voice];
+      [1:a]aformat=channel_layouts=stereo,volume=0.2[bg];
+      [voice][bg]amix=inputs=2:dropout_transition=0
+      `
+        )
 
         .outputOptions('-c:a pcm_s16le')
 
@@ -131,6 +124,7 @@ export class AudioService {
 
   private audiCutte(duration?: number, name?: string, nameFile?: string) {
     if (name && duration && nameFile) {
+      const delay = duration + 2
       const bgAudio = app.publicPath(`backgroundAudio/${name}.mp3`)
       console.log('duration', bgAudio)
       const folder = app.publicPath(path.join('cutte', nameFile))
@@ -139,7 +133,7 @@ export class AudioService {
         src: bgAudio,
         target: folder,
         start: 0,
-        end: duration,
+        end: delay,
       })
     }
   }
