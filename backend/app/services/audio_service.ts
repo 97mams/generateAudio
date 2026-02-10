@@ -24,8 +24,7 @@ export class AudioService {
     const durationInSeconds = await this.getAudioDuration(folder.folder as string)
     this.audiCutte(durationInSeconds, '1', folder.name)
     const mix = await this.mixAudio(folder.name)
-    console.log('mix', mix)
-    // return this.getAudio(mix)
+    return this.getAudio(mix)
   }
 
   async removeAudioFile(id: number): Promise<boolean> {
@@ -44,8 +43,9 @@ export class AudioService {
     language: string
   ): Promise<{ folder: string; name: string }> {
     const g = new GTTS(text, language)
-    const name = Date.now() + '.mp3'
-    const folder = app.publicPath(path.join('uploads'), name)
+    const name = String(Date.now())
+    const file = name + '.mp3'
+    const folder = app.publicPath(path.join('uploads'), file)
     fs.mkdirSync(app.publicPath(path.join('uploads')), { recursive: true, mode: 0o755 })
     await Audio.create({ name: name })
     return new Promise((resolve, reject) =>
@@ -64,7 +64,7 @@ export class AudioService {
     return {
       id: audio?.id,
       name: audio?.name,
-      url: `public/uploads/${audio?.name}`,
+      url: `public/mixedAudio/${audio?.name}`,
       download: `/audio/${audio?.id}/download`,
       stream: `/audio/${audio?.id}/stream`,
     }
@@ -72,8 +72,8 @@ export class AudioService {
 
   private mixAudio(audio: string): Promise<string> {
     const splintNameAudio = audio.split('.')
-    const audio1 = app.publicPath(path.join('uploads', audio))
-    const audio2 = app.publicPath(path.join('cutte', audio))
+    const audio1 = app.publicPath(path.join('uploads', audio + '.mp3'))
+    const audio2 = app.publicPath(path.join('cutte', audio + '.mp3'))
     const outputDir = app.publicPath('mixedAudio')
     const output = path.join(outputDir, `mixed_${splintNameAudio[0]}.wav`)
 
@@ -127,7 +127,7 @@ export class AudioService {
       const delay = duration + 2
       const bgAudio = app.publicPath(`backgroundAudio/${name}.mp3`)
       console.log('duration', bgAudio)
-      const folder = app.publicPath(path.join('cutte', nameFile))
+      const folder = app.publicPath(path.join('cutte', nameFile + '.mp3'))
       fs.mkdirSync(app.publicPath(path.join('cutte')), { recursive: true, mode: 0o755 })
       mp3Cutter.cut({
         src: bgAudio,
