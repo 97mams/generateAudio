@@ -47,12 +47,12 @@ export class AudioService {
     const file = name + '.mp3'
     const folder = app.publicPath(path.join('uploads'), file)
     fs.mkdirSync(app.publicPath(path.join('uploads')), { recursive: true, mode: 0o755 })
-    await Audio.create({ name: name })
     return new Promise((resolve, reject) =>
       g.save(folder, async (error) => {
         if (error) {
           reject(error)
         } else {
+          await Audio.create({ name: name })
           resolve({ folder, name })
         }
       })
