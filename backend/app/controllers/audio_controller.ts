@@ -38,7 +38,10 @@ export default class AudioController {
       return response.notFound()
     }
 
-    return response.attachment(app.makePath('public/uploads', audio.name), audio.name)
+    return response.attachment(
+      app.makePath('public/mixedAudio', 'mixed_' + audio.name + '.wav'),
+      audio.name
+    )
   }
 
   async stream({ params, response }: HttpContext) {
@@ -46,10 +49,10 @@ export default class AudioController {
     if (!audio) {
       return response.notFound()
     }
-    const filePath = app.makePath('public/uploads', audio.name)
+    const filePath = app.makePath('public/mixedAudio', 'mixed_' + audio.name + '.wav')
 
     response.header('Content-Type', 'audio/mpeg')
-    response.header('Content-Type', 'application/octoet-stream')
+    response.header('Content-Type', 'application/octet-stream')
     response.header('Content-Disposition', `inline; filename="${audio.name}"`)
 
     return response.stream(createReadStream(filePath))
