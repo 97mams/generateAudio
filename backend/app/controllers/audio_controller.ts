@@ -65,8 +65,8 @@ export default class AudioController {
     const deleted = await this.service.removeAudioFile(params.id)
     console.log(deleted)
     if (deleted) {
-      return { message: 'Audio deleted successfully' }
+      return { type: 'success', message: 'Audio deleted successfully' }
     }
-    return { message: 'Audio file does not exist' }
+    return { type: 'error', message: 'Audio file does not exist' }
   }
 }

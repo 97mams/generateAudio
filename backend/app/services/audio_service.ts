@@ -36,7 +36,10 @@ export class AudioService {
       fs.unlinkSync(filePath)
       return true
     }
-    return false
+    if (!audio) {
+      return false
+    }
+    return true
   }
 
   private async generateAudio(

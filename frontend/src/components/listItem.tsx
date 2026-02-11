@@ -21,13 +21,17 @@ export function ListItems({
       const resp = await fetch(`${API_URL}/audio/${id}`, {
         method: "DELETE",
       });
-
-      if (!resp.ok) throw new Error();
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.message || "Failed to delete audio");
+      if (data.type === "error") {
+        toast.error(data.message);
+        return;
+      }
 
       onDelete?.(id);
-      toast.success("Audio deleted successfully");
-    } catch {
-      toast.error("Failed to delete audio");
+      toast.success(data.message);
+    } catch (err) {
+      console.error(err);
     }
   };
 
