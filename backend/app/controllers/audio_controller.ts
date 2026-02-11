@@ -62,10 +62,9 @@ export default class AudioController {
    * Delete record
    */
   async destroy({ params }: HttpContext) {
-    const audio = await Audio.findOrFail(params.id)
     const deleted = await this.service.removeAudioFile(params.id)
+    console.log(deleted)
     if (deleted) {
-      await audio.delete()
       return { message: 'Audio deleted successfully' }
     }
     return { message: 'Audio file does not exist' }

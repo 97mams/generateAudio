@@ -31,6 +31,7 @@ export class AudioService {
     const audio = await Audio.findOrFail(id)
     const fileName = audio.name
     const filePath = app.publicPath(path.join('uploads', fileName))
+    await audio.delete()
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath)
       return true
