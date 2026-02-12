@@ -16,13 +16,28 @@ type AudioData = {
 }
 
 export class AudioService {
+  private _duration: number
+
+  constructor() {
+    this._duration = 0
+  }
+
+  get duration(): number {
+    return this._duration
+  }
+
+  set duration(value: number) {
+    this._duration = value
+  }
+
   async createAudio(data: AudioData | any) {
     const folder: { folder: string; name: string } = await this.generateAudio(
       data.text,
       data.language
     )
     const durationInSeconds = await this.getAudioDuration(folder.folder as string)
-    this.audiCutte(durationInSeconds, '1', folder.name)
+    this.duration = durationInSeconds
+    this.audiCutte('1', folder.name)
     const mix = await this.mixAudio(folder.name)
     return this.getAudio(mix)
   }
@@ -65,6 +80,15 @@ export class AudioService {
 
   private async getAudio(name: string) {
     const audio = await Audio.findBy('name', name)
+    if (this.duration < 10) {
+      return {
+        id: audio?.id,
+        name: audio?.name,
+        url: `public/uploads/${audio?.name}`,
+        download: `/audio/${audio?.id}/download`,
+        stream: `/audio/${audio?.id}/stream`,
+      }
+    }
     return {
       id: audio?.id,
       name: audio?.name,
@@ -82,6 +106,10 @@ export class AudioService {
     const output = path.join(outputDir, `mixed_${splintNameAudio[0]}.wav`)
 
     const delayMs = 1000
+
+    if (this.duration < 10) {
+      return Promise.resolve(audio)
+    }
 
     if (!fs.existsSync(audio1)) {
       throw new Error(`Audio1 introuvable: ${audio1}`)
@@ -118,17 +146,17 @@ export class AudioService {
     })
   }
 
-  private async getAudioDuration(filePath: string) {
+  private async getAudioDuration(filePath: string): Promise<number> {
     if (fs.existsSync(filePath)) {
       const metadata = await parseFile(filePath)
-      return metadata.format.duration
+      return metadata?.format?.duration || 0
     }
     return 0
   }
 
-  private audiCutte(duration?: number, name?: string, nameFile?: string) {
-    if (name && duration && nameFile) {
-      const delay = duration + 2
+  private audiCutte(name?: string, nameFile?: string) {
+    if (name && nameFile && this.duration < 10) {
+      const delay = this.duration + 2
       const bgAudio = app.publicPath(`backgroundAudio/${name}.mp3`)
       console.log('duration', bgAudio)
       const folder = app.publicPath(path.join('cutte', nameFile + '.mp3'))
