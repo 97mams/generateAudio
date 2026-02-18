@@ -54,7 +54,7 @@ export function ListItems({
     <div className="w-md h-96 overflow-y-auto">
       {items.length === 0 && sekeletonRender()}
       {items.map((item) => (
-        <div key={item.id} className="flex items-end gap-2 mb-2">
+        <div key={item.id} className="flex items-start gap-2 mb-2">
           <AudioPlayer src={`${API_URL}${item.stream}`} />
 
           <a href={`${API_URL}${item.download}`}>

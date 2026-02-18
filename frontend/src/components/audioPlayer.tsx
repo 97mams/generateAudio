@@ -1,3 +1,4 @@
+import { PauseIcon, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -61,8 +62,17 @@ export function AudioPlayer({ src }: Props) {
   };
 
   return (
-    <div className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl shadow-2xl text-white">
-      <div className="mb-4">
+    <div className="w-full flex items-start max-w-md text-white">
+      <div className="flex gap-4 mr-4">
+        <button onClick={togglePlay}>
+          {isPlaying ? (
+            <Play className="w-4 h-4" />
+          ) : (
+            <PauseIcon className="w-4 h-4 rotate-90" />
+          )}
+        </button>
+      </div>
+      <div>
         <input
           type="range"
           min={0}
@@ -76,16 +86,6 @@ export function AudioPlayer({ src }: Props) {
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
-      </div>
-
-      {/* Controls */}
-      <div className="flex justify-center">
-        <button
-          onClick={togglePlay}
-          className="w-14 h-14 bg-indigo-600 hover:bg-indigo-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-95"
-        >
-          {isPlaying ? "⏸" : "▶"}
-        </button>
       </div>
 
       <audio ref={audioRef} src={src} />
