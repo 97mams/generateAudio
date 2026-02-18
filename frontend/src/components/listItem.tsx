@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { AudioPlayer } from "./audioPlayer.tsx";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -56,16 +57,32 @@ export function ListItems({
       {items.map((item) => (
         <div key={item.id} className="flex items-start gap-2 mb-2">
           <AudioPlayer src={`${API_URL}${item.stream}`} />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a href={`${API_URL}${item.download}`}>
+                <Button variant="outline">
+                  <DownloadIcon />
+                </Button>
+              </a>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Download</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <a href={`${API_URL}${item.download}`}>
-            <Button variant="outline">
-              <DownloadIcon />
-            </Button>
-          </a>
-
-          <Button variant="destructive" onClick={() => handlerDelete(item.id)}>
-            <Trash2 />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="destructive"
+                onClick={() => handlerDelete(item.id)}
+              >
+                <Trash2 />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Delete</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       ))}
       {isPending && sekeletonRender()}
