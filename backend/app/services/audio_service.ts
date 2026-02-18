@@ -37,7 +37,10 @@ export class AudioService {
     )
     const durationInSeconds = await this.getAudioDuration(folder.folder as string)
     this.duration = durationInSeconds
-    this.audiCutte('1', folder.name)
+    if (this.duration < 10) {
+      return this.getAudio(folder.name)
+    }
+    this.audioCutte('1', folder.name)
     const mix = await this.mixAudio(folder.name)
     return this.getAudio(mix)
   }
@@ -154,11 +157,10 @@ export class AudioService {
     return 0
   }
 
-  private audiCutte(name?: string, nameFile?: string) {
-    if (name && nameFile && this.duration < 10) {
+  private audioCutte(name?: string, nameFile?: string) {
+    if (name && nameFile && this.duration > 10) {
       const delay = this.duration + 2
       const bgAudio = app.publicPath(`backgroundAudio/${name}.mp3`)
-      console.log('duration', bgAudio)
       const folder = app.publicPath(path.join('cutte', nameFile + '.mp3'))
       fs.mkdirSync(app.publicPath(path.join('cutte')), { recursive: true, mode: 0o755 })
       mp3Cutter.cut({
