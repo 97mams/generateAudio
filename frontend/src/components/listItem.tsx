@@ -1,6 +1,7 @@
 import type { dataType } from "@/App";
 import { DownloadIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { AudioPlayer } from "./audioPlayer.tsx";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
@@ -54,9 +55,7 @@ export function ListItems({
       {items.length === 0 && sekeletonRender()}
       {items.map((item) => (
         <div key={item.id} className="flex items-end gap-2 mb-2">
-          <audio controls>
-            <source src={`${API_URL}${item.stream}`} />
-          </audio>
+          <AudioPlayer src={`${API_URL}${item.stream}`} />
 
           <a href={`${API_URL}${item.download}`}>
             <Button variant="outline">
