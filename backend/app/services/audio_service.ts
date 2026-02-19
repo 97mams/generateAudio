@@ -138,7 +138,7 @@ export class AudioService {
       `
         )
 
-        .outputOptions('-c:a pcm_s16le')
+        .outputOptions(['-preset fast', '-crf 23'])
 
         .output(output)
 
