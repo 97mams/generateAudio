@@ -50,6 +50,7 @@ export default class AudioController {
       return response.notFound()
     }
     const filePath = app.makePath('public/mixedAudio', 'mixed_' + audio.name + '.wav')
+    console.log(filePath)
 
     response.header('Content-Type', 'audio/mpeg')
     response.header('Content-Type', 'application/octet-stream')

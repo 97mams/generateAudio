@@ -122,7 +122,9 @@ export class AudioService {
       throw new Error(`Audio2 introuvable: ${audio2}`)
     }
 
-    fs.mkdirSync(outputDir, { recursive: true, mode: 0o755 })
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true })
+    }
 
     return new Promise((resolve, reject) => {
       ffmpeg()
@@ -138,7 +140,7 @@ export class AudioService {
       `
         )
 
-        .outputOptions(['-preset fast', '-crf 23'])
+        .outputOptions(['-map [mixed]', '-c:a aac', '-b:a 96k', '-ar 44100', '-ac 2', '-threads 1'])
 
         .output(output)
 
