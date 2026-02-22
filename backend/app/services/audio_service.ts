@@ -193,4 +193,18 @@ export class AudioService {
 
     return response.stream(createReadStream(filePath))
   }
+
+  async downloadAudio(id: number, response: Context['response']) {
+    const audio = await Audio.find(id)
+    let filePath = app.makePath('public/mixedAudio', 'mixed_' + audio?.name + '.wav')
+    if (!audio) {
+      return response.notFound()
+    }
+
+    if (this._duration < 10) {
+      filePath = app.makePath('public/uploads', audio.name + '.mp3')
+    }
+
+    return response.attachment(filePath, audio.name)
+  }
 }
