@@ -4,7 +4,6 @@ import { createAudioValidator } from '#validators/audio_validate'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
-import { createReadStream } from 'node:fs'
 
 @inject()
 export default class AudioController {
@@ -45,18 +44,7 @@ export default class AudioController {
   }
 
   async stream({ params, response }: HttpContext) {
-    const audio = await Audio.find(params.id)
-    if (!audio) {
-      return response.notFound()
-    }
-    const filePath = app.makePath('public/mixedAudio', 'mixed_' + audio.name + '.wav')
-    console.log(filePath)
-
-    response.header('Content-Type', 'audio/mpeg')
-    response.header('Content-Type', 'application/octet-stream')
-    response.header('Content-Disposition', `inline; filename="${audio.name}"`)
-
-    return response.stream(createReadStream(filePath))
+    return await this.service.streamAudio(params.id, response)
   }
 
   /**
