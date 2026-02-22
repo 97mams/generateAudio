@@ -1,12 +1,13 @@
 import Audio from '#models/audio'
 import app from '@adonisjs/core/services/app'
 import GTTS from 'gtts'
-import fs from 'node:fs'
+import fs, { createReadStream } from 'node:fs'
 import path from 'node:path'
 
 import ffmpeg from 'fluent-ffmpeg'
 import mp3Cutter from 'mp3-cutter'
 import { parseFile } from 'music-metadata'
+import { Context } from 'node:vm'
 
 ffmpeg.setFfmpegPath('ffmpeg')
 
@@ -172,5 +173,24 @@ export class AudioService {
         end: delay,
       })
     }
+  }
+
+  async streamAudio(id: number, response: Context['response']) {
+    const audio = await Audio.find(id)
+    if (!audio) {
+      return response.notFound()
+    }
+    let filePath = app.makePath('public/mixedAudio', 'mixed_' + audio.name + '.wav')
+    console.log(filePath)
+
+    if (this._duration < 10) {
+      filePath = app.makePath('public/uploads', audio.name + '.mp3')
+    }
+
+    response.header('Content-Type', 'audio/mpeg')
+    response.header('Content-Type', 'application/octet-stream')
+    response.header('Content-Disposition', `inline; filename="${audio.name}"`)
+
+    return response.stream(createReadStream(filePath))
   }
 }
