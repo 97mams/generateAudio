@@ -3,7 +3,6 @@ import { AudioService } from '#services/audio_service'
 import { createAudioValidator } from '#validators/audio_validate'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
 
 @inject()
 export default class AudioController {
@@ -31,16 +30,7 @@ export default class AudioController {
   }
 
   async download({ params, response }: HttpContext) {
-    const audio = await Audio.find(params.id)
-
-    if (!audio) {
-      return response.notFound()
-    }
-
-    return response.attachment(
-      app.makePath('public/mixedAudio', 'mixed_' + audio.name + '.wav'),
-      audio.name
-    )
+    return await this.service.streamAudio(params.id, response)
   }
 
   async stream({ params, response }: HttpContext) {
