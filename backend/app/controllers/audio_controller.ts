@@ -11,7 +11,8 @@ export default class AudioController {
    * Display a list of resource
    */
   async index({ request }: HttpContext) {
-    request.header('user-agent')
+    const user = request.header('user-agent')
+    console.log(user)
     const audios = await Audio.all()
 
     return audios.map((audio) => ({
