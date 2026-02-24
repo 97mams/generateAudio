@@ -1,7 +1,7 @@
-import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-
+import Audio from '#models/audio'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
-import Audio from './audio.js'
 
 export default class Agent extends BaseModel {
   @column({ isPrimary: true })
@@ -17,5 +17,5 @@ export default class Agent extends BaseModel {
   declare updatedAt: DateTime
 
   @hasMany(() => Audio)
-  public audio: HasMany<typeof Audio>
+  declare audio: HasMany<typeof Audio>
 }
