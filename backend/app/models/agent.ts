@@ -16,8 +16,6 @@ export default class Agent extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @hasMany(() => Audio, {
-    foreignKey: 'agentId',
-  })
-  declare audio: HasMany<typeof Audio>
+  @hasMany(() => Audio)
+  declare posts: HasMany<typeof Audio>
 }
